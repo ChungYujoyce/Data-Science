@@ -9,12 +9,12 @@ using namespace std;
 
 struct FPTreeNode {
     int count;
-    string name; //item name
-    unordered_map<string, FPTreeNode *> children;
+    int name; //item name
+    unordered_map<int, FPTreeNode *> children;
     FPTreeNode* parent;
     FPTreeNode* link; //next node that share same name
     
-    FPTreeNode(string _name,FPTreeNode* _parent,int _count = 1)
+    FPTreeNode(int _name,FPTreeNode* _parent,int _count = 1)
     {
         name = _name;
         parent = _parent;
@@ -24,7 +24,7 @@ struct FPTreeNode {
     }
     ~FPTreeNode()
     {
-        unordered_map<string, FPTreeNode*>::iterator it;
+        unordered_map<int, FPTreeNode*>::iterator it;
         for (it = children.begin(); it != children.end(); it ++) {
             if(it->second!= NULL)
             {
@@ -35,11 +35,11 @@ struct FPTreeNode {
 };
 
 struct FPHeaderTableNode {
-    string name;
-    int    freq; //total frequency
+    int name;
+    int freq; //total frequency
     FPTreeNode* head; //link to FPTree
     FPTreeNode* end; 
-    FPHeaderTableNode(string _name,int _freq = 1,FPTreeNode* _head = NULL)
+    FPHeaderTableNode(int _name,int _freq = 1,FPTreeNode* _head = NULL)
     {
         name = _name;
         freq = _freq;
@@ -49,9 +49,9 @@ struct FPHeaderTableNode {
 
 //describe transaction
 struct FPTransItem {
-    string name;
+    int name;
     int count;
-    FPTransItem(string _name,int _count)
+    FPTransItem(int _name,int _count)
     {
         name  = _name;
         count = _count;
@@ -70,15 +70,18 @@ struct FPFreqResult {
     float freq;
     vector<FPTransItem> items;
 };
-
+struct tmpitem {  
+    float freq;
+    vector<int> items;
+};
 class FPGrowth {
 private:
-    clock_t start;//use for time calucate
     
     float minCountSupport;//absulate minimum support count
     float minSupport; //threshold value
     int   itemCount; //count of items that march minSupport
-    
+    int transCount = 0; // count of tansactions
+
     FPTreeNode* root;
     vector<FPTransItem *> *prefix;
     
@@ -86,7 +89,7 @@ private:
     vector<FPHeaderTableNode *> FPHeaderTable;
     
     //name > headerTable index (hash map), nameIndex[0] store the max freq item
-    unordered_map<string, int> nameIndex;
+    unordered_map<int, int> nameIndex;
     
     
     //init HeaderTable and name-to-HeaderTable inidex
@@ -99,13 +102,12 @@ private:
     void buildFPTree(vector<FPTrans> &trans);
     
     //insert a tran to a tree
-    void insertTran(vector<string> &items);
+    void insertTran(vector<int> &items);
     void insertTran(vector<FPTransItem*> &items);
     
     //mining
     void miningFPTree(vector<FPFreqResult> &result);
     void printSingleResult(vector<FPFreqResult> &result);
-    
 
 public:
     FPGrowth(float _minSupport);
@@ -115,16 +117,26 @@ public:
     
     void output(vector<FPFreqResult> &result);
     void outputToFile(string fileName);
-    
+    static bool compare_length(const tmpitem &num1, const tmpitem &num2){
+        return num1.items.size() < num2.items.size();
+    } 
+    static bool compare_items(const tmpitem &num1, const tmpitem &num2){
+        int i = 0;
+        if(num1.items.size() == num2.items.size()){
+            while(i!= num2.items.size()-1){
+                if(num1.items[i] != num2.items[i]) break;
+                else i++;
+            }
+            return num1.items[i] < num2.items[i];
+        }else return num1.items.size() < num2.items.size();
+    }
     //FOR DEBUG
     void outputHeaderTable();
-    void outputTran(vector<string> items);
+    void outputTran(vector<int> items);
     void outputTree();
     void outputPrefix();
     void outputFreq();
 };
-
-
 #endif /* defined(__FrequentPatternMining__FPGrowth__) */
 
 #pragma -mark public method
@@ -132,16 +144,13 @@ public:
 FPGrowth::FPGrowth(float _minSupport)
 {
     //init root node
-    root = new FPTreeNode("",NULL,0);
+    root = new FPTreeNode(0,NULL,0); // number items
     //set min support
     minSupport = _minSupport;
 }
 
 void FPGrowth::initFromFile(string fileName)
 {
-    cout << "Init from file: " << fileName  << " ,with min support: " << minSupport <<endl;
-    flush(cout);
-    start = clock();
     buildHeaderTable(fileName);
     buildFPTree(fileName);
     prefix = NULL; //insure that first mining will creat a new prefix
@@ -151,35 +160,43 @@ void FPGrowth::outputToFile(string fileName)
 {
     ofstream ofile;
     ofile.open(fileName.c_str());
-    if (!ofile) {
-        cout << "Can not open file :" << fileName << endl;
-        return;
-    }
-    
+
     vector<FPFreqResult> result;
     output(result);
-    time_t t_end = time(NULL) ;
-    cout<< "Total time used for mining: "<< (clock()-start)/double(CLOCKS_PER_SEC) << " (sec)" << endl;
-    flush(cout);
+    vector<tmpitem> sortresult;
     vector<FPFreqResult>::iterator it;
     for (it = result.begin(); it != result.end(); it ++) {
+        vector<int>itemset;
+        struct tmpitem temp;
         vector<FPTransItem>::iterator itemIt;
         for (itemIt = it->items.begin(); itemIt != it->items.end(); itemIt ++) {
-            if(itemIt == it->items.begin());
-            else cout << ",";
-            cout << itemIt->name;
-            if(itemIt == it->items.begin());
-            else ofile << ",";
-            ofile << itemIt->name;
+            itemset.push_back(itemIt->name);
         }
-        // round precision
-        double num = (int)((float)it->freq/20.0 * 10000 + 0.5) / (10000 * 1.0);
+        temp.items = itemset;
+        temp.freq = it->freq;
+        sortresult.push_back(temp);
+    }
+    for (int i=0 ;i<sortresult.size(); i++) {
+        sort(sortresult[i].items.begin(), sortresult[i].items.end());
+    }
+    sort(sortresult.begin(), sortresult.end(), FPGrowth::compare_length);
+    sort(sortresult.begin(), sortresult.end(), FPGrowth::compare_items);
+    for (int i=0 ;i< sortresult.size(); i++) {
+        struct tmpitem temp = sortresult[i];
+        vector<int> tmp = temp.items;
+        for (int j=0 ;j<tmp.size(); j++) {
+            if(j==0);
+            else cout << ",";
+            cout << tmp[j];
+            if(j==0);
+            else ofile << ",";
+            ofile << tmp[j];
+        }
+        double num = (int)((float)temp.freq/(float)transCount * 10000 + 0.5) / (10000 * 1.0);
         cout<<":"<< setiosflags(ios::fixed)<<setprecision(4)<<num<<endl;
         ofile << ":" << setiosflags(ios::fixed)<<setprecision(4)<<num<< endl;
+       //cout << temp.freq << endl; 
     }
-    t_end = time(NULL);
-    cout<< "Total time used for mining and output: "<< (clock()-start)/double(CLOCKS_PER_SEC) << " (sec)" << endl;
-    flush(cout);
     ofile.close();
 
 }
@@ -202,14 +219,9 @@ void FPGrowth::buildHeaderTable(string fileName)
 {
     ifstream ifile;
     ifile.open(fileName.c_str());
-    if (!ifile) {
-        cout << "Can not open file :" << fileName << endl;
-        return;
-    }
-    
+
     string tran; //get a transaction
     int index = 0; //index in HeaderTable
-    int transCount = 0;
     vector< set<int> > vect;
     while (getline(ifile , tran)) {
         transCount ++;
@@ -229,8 +241,7 @@ void FPGrowth::buildHeaderTable(string fileName)
         set<int>::iterator it = s.begin();
         //fout << remap(*it);
         while(it != s.end()){
-            string item = to_string(*it);
-            cout << item << " ";
+            int item = *it;
             if (nameIndex.find(item) != nameIndex.end()) {
                     FPHeaderTable[nameIndex[item]]->freq ++;
             }
@@ -242,31 +253,8 @@ void FPGrowth::buildHeaderTable(string fileName)
             }   
             it++;
         }
-        cout << endl;
-        
     }
-    /*while (getline(ifile,tran)) {
-        transCount ++;
-        stringstream strStream(tran);
-        string item;
-        for(string item; strStream >> item) {
-            if (strStream.peek() == ',')
-                strStream.ignore();
-            if (nameIndex.find(item) != nameIndex.end()) {
-                    FPHeaderTable[nameIndex[item]]->freq ++;
-            }
-            else{ //item doesn't exit in Header Table
-                nameIndex[item] = index;
-                FPHeaderTableNode *headerTableNode = new FPHeaderTableNode(item);
-                FPHeaderTable.push_back(headerTableNode);
-                index ++;
-            }   
 
-            
-        }
-    }*/
-    
-    
     //delete items that not match min Support
     vector<FPHeaderTableNode *>::iterator it;
     minCountSupport = (float)transCount * minSupport;
@@ -285,10 +273,8 @@ void FPGrowth::buildHeaderTable(string fileName)
 void FPGrowth::buildHeaderTable(vector<FPTrans> &trans)
 {
     int index = 0; //index in HeaderTable
-    int transCount = 0;
     vector<FPTrans>::iterator transIt;
     for (transIt = trans.begin(); transIt != trans.end(); transIt++) {
-        transCount ++;
         vector<FPTransItem>::iterator itemIt;
         for (itemIt = transIt->items.begin(); itemIt != transIt->items.end(); itemIt++) {
             if (nameIndex.find((itemIt)->name) != nameIndex.end()) {
@@ -318,7 +304,6 @@ void FPGrowth::buildHeaderTable(vector<FPTrans> &trans)
     sortHeaderTable();
 }
 
-
 bool CompareHeaderTableNode(FPHeaderTableNode *a,FPHeaderTableNode *b)
 {
     return a->freq > b->freq;
@@ -341,12 +326,12 @@ void FPGrowth::sortHeaderTable()
 }
 
 
-void FPGrowth::insertTran(vector<string> &items)
+void FPGrowth::insertTran(vector<int> &items)
 {
     FPTreeNode *currentTreeNode = root;
-    unordered_map<string, FPTreeNode*> *currentChildren;
+    unordered_map<int, FPTreeNode*> *currentChildren;
     currentChildren = &(currentTreeNode->children);
-    vector<string>::iterator it;
+    vector<int>::iterator it;
     for (it = items.begin(); it != items.end(); it ++) {
         
         //if prefix match
@@ -380,7 +365,7 @@ void FPGrowth::insertTran(vector<string> &items)
 void FPGrowth::insertTran(vector<FPTransItem*> &items)
 {
     FPTreeNode *currentTreeNode = root;
-    unordered_map<string, FPTreeNode*> *currentChildren;
+    unordered_map<int, FPTreeNode*> *currentChildren;
     currentChildren = &(currentTreeNode->children); //a map from item name to children tree node
     
     vector<FPTransItem*>::iterator it;
@@ -419,8 +404,8 @@ void FPGrowth::insertTran(vector<FPTransItem*> &items)
 }
 
 //sort a transaction use nameIndex
-unordered_map<string, int> *gNameIndex = NULL;
-bool CompareItem(string a,string b)
+unordered_map<int, int> *gNameIndex = NULL;
+bool CompareItem(int a,int b)
 {
     return (*gNameIndex)[a] < (*gNameIndex)[b];
 }
@@ -432,16 +417,10 @@ void FPGrowth::buildFPTree(string fileName)
 {
     ifstream ifile;
     ifile.open(fileName.c_str());
-    if (!ifile) {
-        cout << "Can not open file :" << fileName << endl;
-        return;
-    }
     
     string tran; //get a transaction
-    int transCount = 0;
     vector< set<int> > vect;
     while (getline(ifile , tran)) {
-        transCount ++;
         set<int> set;
         stringstream ss(tran);
         for (int i; ss >> i;) {
@@ -454,12 +433,11 @@ void FPGrowth::buildFPTree(string fileName)
     ifile.close();
 
     for(int i=0;i<vect.size();i++){
-        vector<string> items; // transaction items
+        vector<int> items; // transaction items
         set<int> s = vect[i];
         set<int>::iterator it = s.begin();
-        //fout << remap(*it);
         while(it != s.end()){
-            string item = to_string(*it);
+            int item = *it;
             if (nameIndex.find(item) != nameIndex.end()) {
                 items.push_back(item); //only add item that match minSupport
             }
@@ -600,8 +578,6 @@ FPGrowth::~FPGrowth()
         delete *it;
     }
 }
-
-
 #pragma -mark debug method
 
 void FPGrowth::outputHeaderTable()
@@ -620,9 +596,9 @@ void FPGrowth::outputHeaderTable()
     cout << endl;
 }
 
-void FPGrowth::outputTran(vector<string> items)
+void FPGrowth::outputTran(vector<int> items)
 {
-    vector<string>::iterator it;
+    vector<int>::iterator it;
     cout << "Tran items: " ;
     for (it = items.begin(); it != items.end(); it ++) {
         cout << *it << " ";
@@ -640,7 +616,7 @@ void FPGrowth::outputTree()
         cur = q.front();
         q.pop();
         cout << "Name: " << cur->name << "\tCount: " << cur->count << "\tChildren num: "<< cur->children.size() << endl;
-        unordered_map<string, FPTreeNode*>::iterator it;
+        unordered_map<int, FPTreeNode*>::iterator it;
         for (it = cur->children.begin(); it != cur->children.end(); it ++) {
             q.push((*it).second);
         }
@@ -676,10 +652,11 @@ int main(int argc, const char * argv[])
 {
     
     float minSupport;
+    string inputfile;
+    string outputfile;
     FPGrowth *fp;   
-    
-    //test retail.dat
     minSupport = 0.2;
+
     fp = new FPGrowth(minSupport);
     fp->initFromFile("sample.txt");
     fp->outputToFile("result.txt");
