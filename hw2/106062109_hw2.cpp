@@ -76,7 +76,6 @@ struct tmpitem {
 };
 class FPGrowth {
 private:
-    
     float minCountSupport;//absulate minimum support count
     float minSupport; //threshold value
     int   itemCount; //count of items that march minSupport
@@ -117,9 +116,6 @@ public:
     
     void output(vector<FPFreqResult> &result);
     void outputToFile(string fileName);
-    static bool compare_length(const tmpitem &num1, const tmpitem &num2){
-        return num1.items.size() < num2.items.size();
-    } 
     static bool compare_items(const tmpitem &num1, const tmpitem &num2){
         int i = 0;
         if(num1.items.size() == num2.items.size()){
@@ -179,23 +175,24 @@ void FPGrowth::outputToFile(string fileName)
     for (int i=0 ;i<sortresult.size(); i++) {
         sort(sortresult[i].items.begin(), sortresult[i].items.end());
     }
-    sort(sortresult.begin(), sortresult.end(), FPGrowth::compare_length);
     sort(sortresult.begin(), sortresult.end(), FPGrowth::compare_items);
+
     for (int i=0 ;i< sortresult.size(); i++) {
         struct tmpitem temp = sortresult[i];
         vector<int> tmp = temp.items;
         for (int j=0 ;j<tmp.size(); j++) {
-            if(j==0);
-            else cout << ",";
-            cout << tmp[j];
+            //if(j==0);
+            //else cout << ",";
+            //cout << tmp[j];
             if(j==0);
             else ofile << ",";
             ofile << tmp[j];
         }
+        //cout << transCount;
+        //cout << (float)temp.freq/(float)transCount << endl;
         double num = (int)((float)temp.freq/(float)transCount * 10000 + 0.5) / (10000 * 1.0);
-        cout<<":"<< setiosflags(ios::fixed)<<setprecision(4)<<num<<endl;
-        ofile << ":" << setiosflags(ios::fixed)<<setprecision(4)<<num<< endl;
-       //cout << temp.freq << endl; 
+        //cout<<":"<< setiosflags(ios::fixed)<<setprecision(4)<<num<<endl;
+        ofile << ":" << setiosflags(ios::fixed)<<setprecision(4)<<num<< endl; 
     }
     ofile.close();
 
@@ -655,11 +652,13 @@ int main(int argc, const char * argv[])
     string inputfile;
     string outputfile;
     FPGrowth *fp;   
-    minSupport = 0.2;
+    cout << "Please input min support , input file name and output file name:" << endl;
+    cout << "e.g. 0.2 sample.txt results.txt" << endl;
+    cin >> minSupport >> inputfile >> outputfile;
 
     fp = new FPGrowth(minSupport);
-    fp->initFromFile("sample.txt");
-    fp->outputToFile("result.txt");
+    fp->initFromFile(inputfile);
+    fp->outputToFile(outputfile);
     delete fp;
 
 }
