@@ -1,0 +1,67 @@
+Trump Hotels Covered Up A Massive Credit Card Theft. Then They Let It Happen Again.
+Seven of Trump’s hotels ignored reports on how they could better protect their customers.
+headshot
+By Christina Wilkie
+Republican presidential nominee&nbsp;Donald Trump attends a campaign event with veterans at the Trump International Hotel&nbs
+TOM WILLIAMS/GETTY IMAGES
+Republican presidential nominee Donald Trump attends a campaign event with veterans at the Trump International Hotel in Washington, D.C.
+WASHINGTON ― Republican presidential nominee Donald Trump’s luxury hotel company agreed Friday to pay a $50,000 settlement and beef up its security systems after investigators found that Trump’s hotels failed to notify customers that a hacker had stolen their credit card numbers and personal information from Trump Hotel computers.
+
+Following the initial identity theft in 2015, Trump’s hotels never implemented the cybersecurity plan they were given to prevent a second attack. As a result, Trump’s hotels and some of his condo properties were hacked again less than a year later. When banks alerted the company to the second hack in March, Trump Hotel Collection waited three more months before telling potential victims about the second hack.
+
+“It is vital in this digital age that companies take all precautions to ensure that consumer information is protected, and that if a data breach occurs, it is reported promptly to our office, in accordance with state law,” said New York Attorney General Eric Schneiderman in a statement about the settlement on Friday. New York law requires that companies inform their customers as soon as possible about the suspected theft of personal information.
+
+After they initially tried to cover up the first cyber attack, hotel employees did nothing to fix the vulnerabilities, despite having received written recommendations on how to protect their customers from hackers and thieves. This left Trump’s hotels defenseless when the hackers struck a second time. Once again, Trump waited months before alerting potential victims.
+
+The handling of cyber theft at Trump’s hotels offers a window into his apparent willingness to compromise the financial security of his customers to make sure his luxury hotels save money or save face.
+“Unfortunately, cyber criminals seeking consumer data have recently infiltrated the systems of many organizations including almost every major hotel company. Safeguarding our customers’ data is a top priority for the company and we will continue taking actions to do so,” a Trump Hotel spokeswoman said in a statement.
+
+Trump has built his presidential campaign on the idea that his self-proclaimed skill as a manager and a negotiator will translate into an ability to manage the United States government and its more than 2 million employees. He also paints himself as the only candidate who will “make America safe again,” a slogan that recently helped Trump to win the endorsement of the national Fraternal Order of Police.
+
+The real estate mogul asks voters to evaluate him based on his management style, his “excellent temperament” and how his businesses are run. But the handling of cyber theft at Trump’s hotels offers a window into his apparent willingness to compromise the financial security of his customers to make sure his luxury hotels save money or save face.
+
+Over two years, payment systems at seven of Trump’s most prestigious hotels were hacked, and more than 70,000 credit card numbers were stolen, according to the New York attorney general. The breach affected Trump hotels in Chicago, Las Vegas, Toronto, Florida, Hawaii and New York ― in short, the crown jewels of Trump’s hospitality empire.
+
+Trump hotels that were hacked by thieves include&nbsp;these six Trump&nbsp;properties.
+TRUMP HOTEL COLLECTION
+Trump hotels that were hacked by thieves include these six Trump properties.
+According to the settlement announcement, here’s what happened.
+
+May 19, 2014: “An attacker infiltrated Trump Hotel Collection’s payment processing system by accessing an administrative account, and deployed malware designed to steal credit card information across the THC computer network.”
+
+June 10, 2015: “A preliminary forensic investigation confirmed the existence of credit card targeting malware at multiple THC locations, including in the computer networks associated with New York, Las Vegas and Chicago hotels.” 
+
+This is when Trump’s hotels first became aware of the breach, and of the credit card-stealing software. It would be another four months before they told their customers and the potential victims of the theft. A final report on the hack “recommended that Trump adopt additional security precautions including “two-factor authentication” for remote access to the THC network.
+
+Subscribe to the Politics email.
+From Washington to the campaign trail, get the latest politics news.
+address@email.com
+But Trump never did, so the interconnected hotel credit card system, as well as the payment systems at Trump condominiums, remained open to attack.
+
+September 25, 2015: Trump Hotel Collection “placed a notice on its website about the data security breach.”
+
+November 10, 2015: “The attacker installed credit card harvesting malware on 39 systems affecting five hotel properties including Trump SoHo New York.”
+
+March 21, 2016: “The attacker connected to a legacy payment system on the network of the Trump International Hotel & Tower New York which included personal information of THC property owners, including the names and social security numbers of approximately 302 people.”
+
+March 30, 2016: Trump Hotel Collection “received additional reports from its payment processors about a second breach.”
+
+April 4, 2016: Trump hotels adopted the much safer, two-factor login system. According to the attorney general, “If Trump Hotels had adopted this solution after the first breach, consistent with its forensic investigator’s recommendation, it may have prevented the second breach.”
+
+June 10, 2016: Trump “provided consumer notification to these affected individuals.”
+
+In addition to settling with the state of New York for $50,000, Trump Hotels also agreed to implement a seven-point plan to bring its cybersecurity policy and practices up to date. This will include keeping a designated cybersecurity manager on staff, regularly testing their systems, and training all employees in how to handle sensitive personal information.
+
+The data breach is just one of a number of legal problems Trump is facing in New York. After thousands of complaints from customers, Schneiderman’s office is also investigating Trump’s now-defunct seminar scam, Trump University, as well as his charitable foundation, the Donald J. Trump Foundation, amid reports that Trump used the charity money to buy things for himself. 
+
+ADVERTISEMENT
+
+The question of how to protect the United States from cyber threats became a major theme of the election this summer after hackers with links to the Russian government stole documents and emails from the Democratic National Committee that were then leaked. 
+
+At one point, Trump encouraged Russian hackers to break into the personal email files of Democratic presidential nominee Hillary Clinton, who is facing her own questions about cybersecurity during her tenure as secretary of state. 
+
+So far, Trump has offered little in the way of actual policy to address how America should respond to the recent uptick in cyberattacks against both the government and the private sector. 
+
+Earlier this year, he was asked if he thought the U.S. should engage in cyber warfare. “Cyber is absolutely a thing of the future and the present,” the GOP nominee told The New York Times. “Look, we’re under cyberattack, forget about them, and we don’t even know where it’s coming from.”
+
+On Monday night, Trump will debate Clinton in New York, where the topics will relate to domestic policy. Foreign policy and national security will be the subjects of later presidential debates.
